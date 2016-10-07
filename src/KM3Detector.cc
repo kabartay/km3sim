@@ -23,7 +23,7 @@
 #include "G4UserLimits.hh"
 #include "G4RegionStore.hh"
 #include "G4VoxelLimits.hh"  // newgeant
-#include "G4GDMLParser.hh"  // newgeant
+//#include "G4GDMLParser.hh"  // newgeant
 #include "G4LogicalVolumeStore.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4GeometryManager.hh"
@@ -908,8 +908,11 @@ G4VPhysicalVolume* KM3Detector::ConstructWorldVolume(const std::string &detxFile
   //    materials volumnes: cathods, crust, water
   //    detector boundaries (bottomPos, topPos, radius)
 
-  G4GDMLParser parser;
-  parser.Write("orca.gdml", worldPV, false);
+  // if you want to make sure, that your geometry definition is correct,
+  // just uncomment the following to write out the entire world to xml
+  // (also include the gdml headers)
+  //G4GDMLParser parser;
+  //parser.Write("orca.gdml", worldPV, false);
 
   return worldPV;
 }
