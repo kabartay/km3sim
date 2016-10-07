@@ -26,5 +26,3 @@ then there are enties for each pmt, e.g.:
 0   - # of OM in this storey (always 0)
 15  - # of PMT in this OM (0-30)
 -3.016500e+03 -7.490400e+03 -3.905900e+03 -8.269880e-01 4.779931e-01 -2.959957e-01   ---- x(cm), y(cm), z(cm), dx,dy,dz of photocathod center
-
- 
