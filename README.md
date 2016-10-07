@@ -1,7 +1,7 @@
 How To Install
 ==============
 
-Install Geant4.10 (compiled with gdml support) in a directory of your choice.
+Install Geant4.10 in a directory of your choice.
 
 Run cmake in a separate build dir (recommended):
     
@@ -10,3 +10,5 @@ Run cmake in a separate build dir (recommended):
     cd build
     cmake -DGeant4_DIR=/PATH/TO/GEANT/INSTALL/lib64/Geant4-10.2.2 ../
     make
+
+    km3sim --help
