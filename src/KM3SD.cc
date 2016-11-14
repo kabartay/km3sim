@@ -81,7 +81,10 @@ G4bool KM3SD::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhist) {
     // since the pmt definitions now directly sit below the world
     // volume, don't do the nested search. Each PMT has unique ID
     // starting at 0 (world/crust are -1/-2)
+    //// old finding mode
     //G4int Depth = aStep->GetPreStepPoint()->GetTouchable()->GetHistoryDepth();
+    //std::cout << Depth << std::endl;
+    //std::cout << aStep->GetPreStepPoint()->GetTouchable() << std::endl;
     //G4int History[10];
     //for (G4int idep = 0; idep < Depth; idep++) {
     //  History[idep] =
@@ -89,8 +92,7 @@ G4bool KM3SD::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhist) {
     //                                                                 idep);
     //}
     //G4int id = myStDetector->allCathods->GetCathodId(Depth, History);
-		// ... retrieve the 'pre-step' point
-		//
+
 		G4StepPoint* preStepPoint = aStep->GetPreStepPoint();
 		G4TouchableHandle theTouchable = preStepPoint->GetTouchableHandle();
 		G4int id = theTouchable->GetCopyNumber();
