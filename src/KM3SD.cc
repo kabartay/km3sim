@@ -97,6 +97,7 @@ G4bool KM3SD::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhist) {
 		G4TouchableHandle theTouchable = preStepPoint->GetTouchableHandle();
 		G4int id = theTouchable->GetCopyNumber();
 		G4int motherID = theTouchable->GetCopyNumber(1);
+    G4cout << "Enter Cathod Finding Mode..." << G4endl;
 
     // check if this photon passes after the angular acceptance
     G4ThreeVector PMTDirection = myStDetector->allCathods->GetDirection(id);

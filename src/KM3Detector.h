@@ -1,19 +1,20 @@
 #ifndef KM3Detector_h
 #define KM3Detector_h 1
 
-#include "KM3Definitions.h"
-#include "KM3Cathods.h"
-#include "G4Material.hh"
-#include "KM3PrimaryGeneratorAction.h"
-#include "KM3EvtIO.h"
-
 #include <stdio.h>
 #include <algorithm>
 #include <cmath>
 #include <vector>
 #include <string>
 
+#include "KM3Definitions.h"
+#include "KM3Cathods.h"
+#include "KM3PrimaryGeneratorAction.h"
+#include "KM3EvtIO.h"
+
+#include "G4Material.hh"
 #include "G4VUserDetectorConstruction.hh"
+#include "G4VSensitiveDetector.hh"
 #include <CLHEP/Units/SystemOfUnits.h>
 // newgeant #include "Saxana/SAXProcessor.h"
 // newgeant #include "Saxana/ProcessingConfigurator.h"
@@ -39,7 +40,8 @@ class KM3Detector : public G4VUserDetectorConstruction {
   G4double outerStorey;
   G4double detectorRadius;
 
-  G4VPhysicalVolume* ConstructWorldVolume(const std::string &detxFile);
+  G4VPhysicalVolume *ConstructWorldVolume(const std::string &detxFile);
+  G4VPhysicalVolume *SetSensitiveCathods(G4VPhysicalVolume *pvol, G4VSensitiveDetector *sd);
 
   // this is the maximum vertical distance of the storeys
   // from the center plus a number of absorpion lengths

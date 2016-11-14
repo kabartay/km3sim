@@ -30,13 +30,14 @@ class KM3SD : public G4VSensitiveDetector {
                          G4double time, G4int originalInfo,
                          const G4ThreeVector &photonDirection);
 
+  void PrintAll();
+  void clear();
+
  private:
   KM3HitsCollection *HitsCollection;
   G4int ProcessHitsCollection(KM3HitsCollection *aCollection);
   G4double TResidual(G4double, const G4ThreeVector &, const G4ThreeVector &,
                      const G4ThreeVector &);
-  void clear();
-  void PrintAll();
   void QuickSort(G4int shorttype, std::vector<KM3Hit *> *theCollectionVector,
                  G4int top, G4int bottom);
   G4int partition_CathodId(std::vector<KM3Hit *> *theCollectionVector,
