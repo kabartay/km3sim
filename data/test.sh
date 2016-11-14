@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 km3sim \
-  -i Numu_10_GeV_E_10_11_By_0_100_0.evt \
-  -o Numu_10_GeV_E_10_11_By_0_100_0.out.evt \
+  -i gseagen.muon-CC.3-100GeV-9.1E7-1bin-3.0gspec.ORCA115_9m_2016.1.evt \
+  -o gseagen.muon-CC.3-100GeV-9.1E7-1bin-3.0gspec.ORCA115_9m_2016.1.out.evt \
   -d orca_120strings_av23min20mhorizontal_18OMs_alt9mvertical_v1.detx \
   -p INPUTParametersRun_3500_scatter_WPD3.3_p0.0075_1.0
