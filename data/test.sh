@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
-../build/km3sim \
-  -p INPUTParametersRun_3500_scatter_WPD3.3_p0.0075_1.0 \
+km3sim \
+  -i Numu_10_GeV_E_10_11_By_0_100_0.evt \
+  -o Numu_10_GeV_E_10_11_By_0_100_0.out.evt \
   -d orca_120strings_av23min20mhorizontal_18OMs_alt9mvertical_v1.detx \
-  -i e_E_10_3000.evt \
-  -o e_E_10_3000.out.evt
+  -p INPUTParametersRun_3500_scatter_WPD3.3_p0.0075_1.0
