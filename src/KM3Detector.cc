@@ -733,13 +733,30 @@ G4VPhysicalVolume *KM3Detector::Construct() {
   for (size_t i = 0; i < theSize; i++) {
     aLogicalVolume = (*aLogicalStore)[i];
 
-    //    if( (aLogicalVolume->GetName() == cathVol) ||
-    //    (aLogicalVolume->GetName() == deadVol) )
-    if (((aLogicalVolume->GetName()).contains(cathVol)) ||
-        ((aLogicalVolume->GetName()).contains(deadVol))) {
+    //if (((aLogicalVolume->GetName()).contains(cathVol)) ||
+    //    ((aLogicalVolume->GetName()).contains(deadVol))) {
+    if( (aLogicalVolume->GetName() == cathVol) ||
+        (aLogicalVolume->GetName() == deadVol) ) {
       aLogicalVolume->SetSensitiveDetector(aMySD);
+      G4cout << "Found Cathvol!" << G4endl;
+    }
     }
   }
+
+	//tempotest
+  // G4VPhysicalVolume* aPhysicalVolume;
+  // std::vector<G4VPhysicalVolume*> *aPhysicalStore;
+  // theSize=G4PhysicalVolumeStore::GetInstance()->size();
+  // aPhysicalStore = G4PhysicalVolumeStore::GetInstance();
+  // for(size_t i=0 ; i<theSize ; i++){
+  //   aPhysicalVolume = (*aPhysicalStore)[i];
+  //   G4cout <<  aPhysicalVolume->GetName() <<" "<<aPhysicalVolume->GetMultiplicity()<<" "<<aPhysicalVolume->GetCopyNo()<< G4endl;
+  // }
+  //tempotest
+
+  //fully adjustable benthos and storey linked list
+  G4cout <<"Total World Volume Entities= " << fWorld->GetLogicalVolume()->TotalVolumeEntities() <<G4endl;
+
 
   // find detector radius and detector center from the Storeys
   G4cout << "Compute the KM3Sim Can... " << G4endl;
