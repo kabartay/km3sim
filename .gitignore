@@ -88,3 +88,6 @@ build/*
 external/docopt.cpp/*
 Makefile
 cmake_install.cmake
+
+# generated output files
+PmtPositionsAndDirections

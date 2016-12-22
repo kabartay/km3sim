@@ -131,8 +131,8 @@ void KM3Detector::FindDetectorRadius() {
   detectorRadius = MaxAbsDist + absdetectorRadius;
   bottomPosition += lowestStorey;
   detectorMaxz = highestStorey + MaxAbsDist;
-  G4cout << "Detector radius (m) and bottom position (m) " << detectorRadius / m
-    << " " << bottomPosition / m << G4endl;
+  std::cout << "Detector radius (m) and bottom position (m) " << detectorRadius / m
+    << " " << bottomPosition / m << std::endl;
 
   // we don't actually need storeys/towers for this
   MyGenerator->PutFromDetector(detectorCenter, detectorMaxRho, detectorMaxz,
@@ -627,7 +627,7 @@ void KM3Detector::ConstructMaterials() {
   //  new G4Material("Cathod", 22, 47.867 * g / mole, 4.507 * g / cm3,
   //      kStateSolid, 287.15 * kelvin, 1.0 * atmosphere);
   Cathod = new G4Material("Cathod", 22, 47.867 * g / mole, 4.507 * g / cm3,
-        kStateSolid, 287.15 * kelvin, 1.0 * atmosphere);
+      kStateSolid, 287.15 * kelvin, 1.0 * atmosphere);
 
   // Set OPTICAL PROPERTIES (read from file) of materials
 
@@ -674,9 +674,26 @@ void KM3Detector::ConstructMaterials() {
 }
 
 
+G4VPhysicalVolume *KM3Detector::SetSensitiveCathods(G4VPhysicalVolume *pvol, 
+    G4VSensitiveDetector *sd) {
+  int n_cath = 0;
+  int n_daughters = pvol->GetLogicalVolume()->GetNoDaughters();
+  for (G4int i=0; i < n_daughters; i++) {
+    G4VPhysicalVolume *daughter = pvol->GetLogicalVolume()->GetDaughter(i);
+    if ((daughter->GetName()).contains("CathodVolume")) {
+      //std::cout << "Got Cathod, setting SD..." << i << std::endl;
+      daughter->GetLogicalVolume()->SetSensitiveDetector(sd);
+    }
+  }
+  return pvol;
+}
+  
+
+
 G4int KM3Detector::TotalPMTEntities(const G4VPhysicalVolume *pvol) {
   int n_cath = 0;
   int n_daughters = pvol->GetLogicalVolume()->GetNoDaughters();
+  std::cout << "N Daughter..." << n_daughters << std::endl;
   for (G4int i=0; i < n_daughters; i++) {
     G4VPhysicalVolume *daughter = pvol->GetLogicalVolume()->GetDaughter(i);
     if ((daughter->GetName()).contains("CathodVolume")) {
@@ -699,19 +716,20 @@ G4VPhysicalVolume *KM3Detector::Construct() {
   std::cout << "Build the World..." << std::endl;
   fWorld = ConstructWorldVolume(Geometry_File);
 
-  if (fWorld == 0)
+  if (fWorld == 0) {
     G4Exception(
         "World volume not set properly check your setup selection "
         "criteria or GDML input!",
-        "", FatalException, "");
+        "", FatalException, ""); 
+  }
 
   std::cout << "Count Cathods..." << std::endl;
-  G4cout << "Total Cathods " << TotalPMTEntities(fWorld) << G4endl;
+  std::cout << "Total Cathods " << TotalPMTEntities(fWorld) << std::endl;
 
   //------------------------------------------------
   // Sensitive detectors
   //------------------------------------------------
-  G4cout << "Define Sensitive Detector... " << G4endl;
+  std::cout << "Define Sensitive Detector... " << std::endl;
 
   G4SDManager *SDman = G4SDManager::GetSDMpointer();
   G4String MySDname = "mydetector1/MySD";
@@ -723,47 +741,53 @@ G4VPhysicalVolume *KM3Detector::Construct() {
   // next find the Cathod && Dead logical volumes and assign them the sensitive
   // detectors
   // "Deadvolume is obsolete" anyways...
-  G4cout << "Assign Cathods as Sensitive areas... " << G4endl;
+  std::cout << "Assign Cathods as Sensitive areas... " << std::endl;
   G4LogicalVolume *aLogicalVolume;
   std::vector<G4LogicalVolume *> *aLogicalStore;
   G4String cathVol("CathodVolume");
   G4String deadVol("DeadVolume");
   size_t theSize = G4LogicalVolumeStore::GetInstance()->size();
+  std::cout << "Volume Store size: " << theSize << std::endl;
   aLogicalStore = G4LogicalVolumeStore::GetInstance();
   for (size_t i = 0; i < theSize; i++) {
     aLogicalVolume = (*aLogicalStore)[i];
+      std::cout << aLogicalVolume->GetName() << std::endl;
 
     //if (((aLogicalVolume->GetName()).contains(cathVol)) ||
-    //    ((aLogicalVolume->GetName()).contains(deadVol))) {
+    //    ((aLogicalVolume->GetName()).contains(deadVol))) 
     if( (aLogicalVolume->GetName() == cathVol) ||
         (aLogicalVolume->GetName() == deadVol) ) {
       aLogicalVolume->SetSensitiveDetector(aMySD);
-      G4cout << "Found Cathvol!" << G4endl;
+      std::cout << "Found Cathvol!" << std::endl;
     }
   }
 
-	//tempotest
-  // G4VPhysicalVolume* aPhysicalVolume;
-  // std::vector<G4VPhysicalVolume*> *aPhysicalStore;
-  // theSize=G4PhysicalVolumeStore::GetInstance()->size();
-  // aPhysicalStore = G4PhysicalVolumeStore::GetInstance();
-  // for(size_t i=0 ; i<theSize ; i++){
-  //   aPhysicalVolume = (*aPhysicalStore)[i];
-  //   G4cout <<  aPhysicalVolume->GetName() <<" "<<aPhysicalVolume->GetMultiplicity()<<" "<<aPhysicalVolume->GetCopyNo()<< G4endl;
-  // }
+  fWorld = SetSensitiveCathods(fWorld, aMySD);
+
+  aMySD->PrintAll();
+
+  //tempotest
+  G4VPhysicalVolume* aPhysicalVolume;
+  std::vector<G4VPhysicalVolume*> *aPhysicalStore;
+  theSize=G4PhysicalVolumeStore::GetInstance()->size();
+  aPhysicalStore = G4PhysicalVolumeStore::GetInstance();
+  for(size_t i=0 ; i<theSize ; i++){
+    aPhysicalVolume = (*aPhysicalStore)[i];
+    std::cout <<  aPhysicalVolume->GetName() <<" "<<aPhysicalVolume->GetMultiplicity()<<" "<<aPhysicalVolume->GetCopyNo()<< std::endl;
+  }
   //tempotest
 
   //fully adjustable benthos and storey linked list
-  G4cout <<"Total World Volume Entities= " << fWorld->GetLogicalVolume()->TotalVolumeEntities() <<G4endl;
+  std::cout <<"Total World Volume Entities= " << fWorld->GetLogicalVolume()->TotalVolumeEntities() <<std::endl;
 
 
   // find detector radius and detector center from the Storeys
-  G4cout << "Compute the KM3Sim Can... " << G4endl;
+  std::cout << "Compute the KM3Sim Can... " << std::endl;
   FindDetectorRadius();
 
   //--------Write the header of the outfile and the Cathods Position, Direction
   // and History Tree
-  G4cout << "Write outfile header... " << G4endl;
+  std::cout << "Write outfile header... " << std::endl;
   G4int nnn0 = 0;
   G4int nnn1 = 1;
   G4int nben = allCathods->GetNumberOfCathods();
@@ -780,12 +804,13 @@ G4VPhysicalVolume *KM3Detector::Construct() {
   TheEVTtoWrite->WriteRunHeader();
 
   // find the total photocathod area on a OM
-  G4cout << "Compute total photocathod area... " << G4endl;
+  std::cout << "Compute total photocathod area... " << std::endl;
   //G4int CaPerOM = (*allOMs)[0]->CathodsIDs->size();
   G4int CaPerOM = 31;
   TotCathodArea =
     CaPerOM * pi * allCathods->GetCathodRadius(0) *
     allCathods->GetCathodRadius(0);
+  std::cout << TotCathodArea  << std::endl;
   // this is valid only if at simulation level (not EM or HA param)
   // all cathods have the same radius. Easy to change to account for a
   // detector with varius cathod types
@@ -815,7 +840,7 @@ G4VPhysicalVolume* KM3Detector::ConstructWorldVolume(const std::string &detxFile
       worldLog,         // assoc. logical volume
       0,                // no mother
       true,            // MANY
-      0);              // cpNR
+      887766554433);              // cpNR
 
   G4Box *crustBox = new G4Box("CrustBox",
       2200 * meter, 2200 * meter, 984.7 * meter);
@@ -828,7 +853,7 @@ G4VPhysicalVolume* KM3Detector::ConstructWorldVolume(const std::string &detxFile
       "Crust",
       worldLog,
       true,
-      1);
+      99887766);
 
   //G4LogicalVolume *towerLog = new G4LogicalVolume(towerBox,
   //    Water, "TowerVolume");
@@ -840,8 +865,8 @@ G4VPhysicalVolume* KM3Detector::ConstructWorldVolume(const std::string &detxFile
   //    1 * meter, 1 * meter, 170.0 * meter);
   //G4Box *storeyBox = new G4Box("StoreyBox",
   //    0.6 * meter, 0.6 * meter, 0.6 * meter);
- // G4Sphere *omSphere = new G4Sphere("OMSphere",
- //     0.0 * cm, 21.6 * cm, 0.0 * deg, 360.0 * deg, 0.0 * deg, 180.0 * deg);
+  // G4Sphere *omSphere = new G4Sphere("OMSphere",
+  //     0.0 * cm, 21.6 * cm, 0.0 * deg, 360.0 * deg, 0.0 * deg, 180.0 * deg);
 
 
   std::cout << "Define Cathods..." << std::endl;
@@ -893,7 +918,7 @@ G4VPhysicalVolume* KM3Detector::ConstructWorldVolume(const std::string &detxFile
           worldLog,
           true,          // no boolean operation, whatever that means
           dumb_id         // copy ID
-      );
+          );
       G4double CathodHeight = -1.0 * mm;
       G4double CathodRadius = 0.0;
       CathodRadius = ((G4Tubs *)cathodPV->GetLogicalVolume()->GetSolid())
