@@ -44,6 +44,8 @@ G4ClassificationOfNewTrack KM3StackingAction::ClassifyNewTrack(
 
   // first check that is not a photon to save time
   if (aTrack->GetDefinition() != G4OpticalPhoton::OpticalPhotonDefinition()) {
+    // ok, this is reached as expected. moving on.
+    //std::cout << "not a photon!" << std::endl;
     kineticEnergy = aTrack->GetKineticEnergy();
 
     // threshold for electron cerenkov production (not applicable for
@@ -60,17 +62,22 @@ G4ClassificationOfNewTrack KM3StackingAction::ClassifyNewTrack(
         (aTrack->GetDefinition()->GetPDGMass() == 0.0))
       return fKill;
 
+    //std::cout << aTrack->GetDefinition()->GetParticleType() << std::endl;
+
     x0 = aTrack->GetPosition();
     distanceV = x0 - MyStDetector->detectorCenter;
     distanceRho2 = distanceV[0] * distanceV[0] + distanceV[1] * distanceV[1];
+    //std::cout << "dist v, center: " << distanceV << distanceRho2 << std::endl;
 
     // if the particle is not muon and is created outside the can kill it
     if (aTrack->GetDefinition() != G4MuonPlus::MuonPlusDefinition() &&
         aTrack->GetDefinition() != G4MuonMinus::MuonMinusDefinition()) {
       if ((x0[2] < MyStDetector->bottomPosition) ||
           (distanceRho2 > detectorMaxRho2) ||
-          (x0[2] > MyStDetector->detectorMaxz))
+          (x0[2] > MyStDetector->detectorMaxz)){
         return fKill;
+      //std::cout << "not a muon + outside, kill it" << std::endl;
+      }
       return fUrgent;
     } else {
       // if it is a muon kill it only if is not going to cross the can
@@ -82,9 +89,11 @@ G4ClassificationOfNewTrack KM3StackingAction::ClassifyNewTrack(
         // goes up while above the can
         return fKill;
       direction = p0[0] * distanceV[0] + p0[1] * distanceV[1];
-      if ((distanceRho2 > detectorMaxRho2) && (direction > 0))
+      if ((distanceRho2 > detectorMaxRho2) && (direction > 0)){
         // goes away while outside the can
+        //std::cout << "muon, goes away while outside -> kill it" << std::endl;
         return fKill;
+      }
 
       // first check if it is inside the can
       G4double rxy2 = x0[0] * x0[0] + x0[1] * x0[1];

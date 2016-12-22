@@ -126,6 +126,9 @@ void KM3Detector::FindDetectorRadius() {
         z_all.begin(), z_all.end()) + 1.0) * meter;
   bottomPosition = (*std::min_element(
         z_all.begin(), z_all.end()) + 1.0) * meter;
+  
+  std::cout << "Min Z, Max Z, MaxAbsDist (on top): " << bottomPosition / m
+    << ", " << highestStorey / m << ", " << MaxAbsDist / m << std::endl;
 
   detectorMaxRho = outerStorey + MaxAbsDist;
   detectorRadius = MaxAbsDist + absdetectorRadius;
@@ -773,7 +776,7 @@ G4VPhysicalVolume *KM3Detector::Construct() {
   aPhysicalStore = G4PhysicalVolumeStore::GetInstance();
   for(size_t i=0 ; i<theSize ; i++){
     aPhysicalVolume = (*aPhysicalStore)[i];
-    std::cout <<  aPhysicalVolume->GetName() <<" "<<aPhysicalVolume->GetMultiplicity()<<" "<<aPhysicalVolume->GetCopyNo()<< std::endl;
+    //std::cout <<  aPhysicalVolume->GetName() <<" "<<aPhysicalVolume->GetMultiplicity()<<" "<<aPhysicalVolume->GetCopyNo()<< std::endl;
   }
   //tempotest
 

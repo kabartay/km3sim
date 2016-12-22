@@ -26,6 +26,7 @@ void KM3SD::Initialize(G4HCofThisEvent *HCE) {
 G4bool KM3SD::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhist) {
   // this may have to change (do not kill every particle on the
   // photocathod)
+  G4cout << "Processing Hits... " << G4endl;
   if (aStep->GetTrack()->GetDefinition()->GetParticleName() !=
       "opticalphoton") {
     // kill every particle except photons that hit the cathod or dead
@@ -33,8 +34,10 @@ G4bool KM3SD::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhist) {
     // aStep->GetTrack()->SetTrackStatus(fStopAndKill);
     // G4cout<<"STOPPED"<<" particle "<<
     // aStep->GetTrack()->GetDefinition()->GetParticleName() <<G4endl;
+    G4cout << "It's not a Photon... " << G4endl;
     return false;
   }
+  G4cout << "A Photon!" << G4endl;
 
   // next kill photons that are incident on the back end of the pmt.
   // The definition of deadvolume is obsolete. so the following never
@@ -51,6 +54,7 @@ G4bool KM3SD::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhist) {
   //  }
 
   G4double edep = aStep->GetTrack()->GetTotalEnergy();
+  G4cout << "Energy: " << edep << G4endl;
   if (edep == 0.) {
     aStep->GetTrack()->SetTrackStatus(
         fStopAndKill);  // kill a photon with zero energy (?)
