@@ -740,7 +740,6 @@ G4VPhysicalVolume *KM3Detector::Construct() {
       aLogicalVolume->SetSensitiveDetector(aMySD);
       G4cout << "Found Cathvol!" << G4endl;
     }
-    }
   }
 
 	//tempotest
