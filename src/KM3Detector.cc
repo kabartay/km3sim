@@ -23,7 +23,7 @@
 #include "G4UserLimits.hh"
 #include "G4RegionStore.hh"
 #include "G4VoxelLimits.hh"  // newgeant
-//#include "G4GDMLParser.hh"  // newgeant
+#include "G4GDMLParser.hh"  // newgeant
 #include "G4LogicalVolumeStore.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4GeometryManager.hh"
@@ -747,11 +747,11 @@ G4VPhysicalVolume *KM3Detector::Construct() {
   G4String cathVol("CathodVolume");
   G4String deadVol("DeadVolume");
   size_t theSize = G4LogicalVolumeStore::GetInstance()->size();
-  std::cout << "Volume Store size: " << theSize << std::endl;
+  std::cout << "Volume Store size (# of logical volumes): " << theSize << std::endl;
   aLogicalStore = G4LogicalVolumeStore::GetInstance();
   for (size_t i = 0; i < theSize; i++) {
     aLogicalVolume = (*aLogicalStore)[i];
-      std::cout << aLogicalVolume->GetName() << std::endl;
+    std::cout << aLogicalVolume->GetName() << std::endl;
 
     //if (((aLogicalVolume->GetName()).contains(cathVol)) ||
     //    ((aLogicalVolume->GetName()).contains(deadVol))) 
@@ -830,7 +830,7 @@ G4VPhysicalVolume* KM3Detector::ConstructWorldVolume(const std::string &detxFile
   //  Cathod (composite)
   std::cout << "Define Volumes..." << std::endl;
   G4Box *worldBox = new G4Box("WorldBox",
-      2200 * meter, 2200 * meter, 2200 * meter);
+      1100 * meter, 1100 * meter, 1100 * meter);
   G4LogicalVolume *worldLog = new G4LogicalVolume(worldBox,
       Water, "World");
   G4VPhysicalVolume *worldPV = new G4PVPlacement(
@@ -843,7 +843,7 @@ G4VPhysicalVolume* KM3Detector::ConstructWorldVolume(const std::string &detxFile
       887766554433);              // cpNR
 
   G4Box *crustBox = new G4Box("CrustBox",
-      2200 * meter, 2200 * meter, 984.7 * meter);
+      1100 * meter, 1100 * meter, (984.7 / 2) * meter);
   G4LogicalVolume *crustLog = new G4LogicalVolume(crustBox,
       Crust, "Crust");
   G4VPhysicalVolume *crustPV = new G4PVPlacement(
@@ -952,8 +952,8 @@ G4VPhysicalVolume* KM3Detector::ConstructWorldVolume(const std::string &detxFile
   // if you want to make sure, that your geometry definition is correct,
   // just uncomment the following to write out the entire world to xml
   // (also include the gdml headers)
-  //G4GDMLParser parser;
-  //parser.Write("orca.gdml", worldPV, false);
+  G4GDMLParser parser;
+  parser.Write("orca.gdml", worldPV, false);
 
   return worldPV;
 }
