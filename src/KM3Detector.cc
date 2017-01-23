@@ -880,14 +880,25 @@ G4VPhysicalVolume* KM3Detector::ConstructWorldVolume(const std::string &detxFile
   std::cout << "Parse DETX..." << std::endl;
   std::ifstream infile(detxFile);
   std::string line;
+  
+  // global_det_id format_version\n
+  int global_det_id, _;
   std::getline(infile, line);
   std::istringstream iss(line);
-  int global_det_id, n_doms;
-  iss >> global_det_id >> n_doms;
+  iss >> global_det_id >> _;
 
-  global_det_id_ = global_det_id;
-  n_doms_ = n_doms;
   numCathods = 0;
+
+  //UTC_validity_from UTC_validity_to \n
+  //UTM_ref_grid UTM_ref_easting UTM_ref_northing UTM_ref_z \n
+  std::getline(infile, line);
+  std::getline(infile, line);
+  
+  int n_doms;
+  std::getline(infile, line);
+  std::istringstream iss(line);
+  iss >> n_doms;
+
 
   for (int dom = 0; dom < n_doms; dom++) {
     std::getline(infile, line);
