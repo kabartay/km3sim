@@ -2,6 +2,8 @@
 #define KM3Physics_h 1
 
 #include "G4VUserPhysicsList.hh"
+#include "G4ParticleTable.hh"
+#include "G4NuclideTable.hh"
 #include "globals.hh"
 #include "KM3Detector.h"
 #include "KM3Cherenkov.h"
@@ -38,6 +40,9 @@ class KM3Physics : public G4VUserPhysicsList {
   G4double defaultCutEnergyValueForElectron;
   G4double defaultCutEnergyValueForMuon;
   G4double defaultCutEnergyValueForHadron;
+
+  G4ParticleTable::G4PTblDicIterator* theParticleIterator;
+  
 };
 
 #endif

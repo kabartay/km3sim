@@ -76,22 +76,26 @@ G4ClassificationOfNewTrack KM3StackingAction::ClassifyNewTrack(
           (distanceRho2 > detectorMaxRho2) ||
           (x0[2] > MyStDetector->detectorMaxz)){
         return fKill;
-      //std::cout << "not a muon + outside, kill it" << std::endl;
+        std::cout << "not a muon + outside, kill it" << std::endl;
       }
       return fUrgent;
     } else {
       // if it is a muon kill it only if is not going to cross the can
       p0 = aTrack->GetMomentumDirection();
-      if ((x0[2] < MyStDetector->bottomPosition) && (p0[2] < 0))
+      if ((x0[2] < MyStDetector->bottomPosition) && (p0[2] < 0)) {
         // goes down while below the can
+        std::cout << "muon, goes down while below -> kill it" << std::endl;
         return fKill;
-      if ((x0[2] > MyStDetector->detectorMaxz) && (p0[2] > 0))
+      }
+      if ((x0[2] > MyStDetector->detectorMaxz) && (p0[2] > 0)) {
         // goes up while above the can
+        std::cout << "muon, goes up while above -> kill it" << std::endl;
         return fKill;
+      }
       direction = p0[0] * distanceV[0] + p0[1] * distanceV[1];
       if ((distanceRho2 > detectorMaxRho2) && (direction > 0)){
         // goes away while outside the can
-        //std::cout << "muon, goes away while outside -> kill it" << std::endl;
+        std::cout << "muon, goes away while outside -> kill it" << std::endl;
         return fKill;
       }
 

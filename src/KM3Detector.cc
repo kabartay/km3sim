@@ -896,19 +896,16 @@ G4VPhysicalVolume* KM3Detector::ConstructWorldVolume(const std::string &detxFile
   
   int n_doms;
   std::getline(infile, line);
-  std::istringstream iss(line);
   iss >> n_doms;
 
 
   for (int dom = 0; dom < n_doms; dom++) {
     std::getline(infile, line);
-    std::istringstream iss(line);
     int dom_id, line_id, floor_id, n_pmts;
     iss >> dom_id >> line_id >> floor_id >> n_pmts;
 
     for (int pmt = 0; pmt < n_pmts; pmt++) {
       std::getline(infile, line);
-      std::istringstream iss(line);
       int pmt_id_global;
       double pos_x, pos_y, pos_z, dir_x, dir_y, dir_z, t0;
       iss >> pmt_id_global >> pos_x >> pos_y >> pos_z >> dir_x >> dir_y >> dir_z >> t0;

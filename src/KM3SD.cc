@@ -56,6 +56,7 @@ G4bool KM3SD::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhist) {
   G4double edep = aStep->GetTrack()->GetTotalEnergy();
   G4cout << "Energy: " << edep << G4endl;
   if (edep == 0.) {
+    G4cout << "Zero Energy. Killing... " << G4endl;
     aStep->GetTrack()->SetTrackStatus(
         fStopAndKill);  // kill a photon with zero energy (?)
     return false;

@@ -71,10 +71,13 @@ void KM3SteppingAction::UserSteppingAction(const G4Step *aStep) {
       // first check if it is inside the can
       G4double RRR2 =
           myStDetector->detectorMaxRho * myStDetector->detectorMaxRho;
+      G4cout << "Detector Radius: " <<RRR2 << G4endl;
+
       G4double rxy2 = x0[0] * x0[0] + x0[1] * x0[1];
       if ((rxy2 > RRR2) || (x0[2] < myStDetector->bottomPosition) ||
           (x0[2] >
            myStDetector->detectorMaxz)) {  // if it is not inside the can
+        G4cout << "Not inside Can!!!: " <<RRR2 << G4endl;
         G4double Tbottom = (myStDetector->bottomPosition - x0[2]) / p0[2];
         G4double Xbottom =
             x0[0] + Tbottom * p0[0] - myStDetector->detectorCenter[0];
