@@ -22,8 +22,8 @@
 #include "G4Colour.hh"
 #include "G4UserLimits.hh"
 #include "G4RegionStore.hh"
-#include "G4VoxelLimits.hh"  // newgeant
-#include "G4GDMLParser.hh"  // newgeant
+#include "G4VoxelLimits.hh"
+//#include "G4GDMLParser.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4GeometryManager.hh"
@@ -963,8 +963,8 @@ G4VPhysicalVolume* KM3Detector::ConstructWorldVolume(const std::string &detxFile
   // if you want to make sure, that your geometry definition is correct,
   // just uncomment the following to write out the entire world to xml
   // (also include the gdml headers)
-  G4GDMLParser parser;
-  parser.Write("orca.gdml", worldPV, false);
+  //G4GDMLParser parser;
+  //parser.Write("orca.gdml", worldPV, false);
 
   return worldPV;
 }

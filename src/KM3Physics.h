@@ -41,7 +41,10 @@ class KM3Physics : public G4VUserPhysicsList {
   G4double defaultCutEnergyValueForMuon;
   G4double defaultCutEnergyValueForHadron;
 
+#ifndef theParticleIterator
+  bool ownIterator = True;
   G4ParticleTable::G4PTblDicIterator* theParticleIterator;
+#endif
   
 };
 

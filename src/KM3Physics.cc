@@ -189,7 +189,9 @@ void KM3Physics::ConstructProcess() {
   ConstructOP();
 
   // Geant 4.10.3
-  auto theParticleIterator = GetParticleIterator();
+#ifndef theParticleIterator
+  theParticleIterator = GetParticleIterator();
+#endif
 
   // tempo list all processes for all particles defined up to the end
 
