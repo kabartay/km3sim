@@ -877,38 +877,62 @@ G4VPhysicalVolume* KM3Detector::ConstructWorldVolume(const std::string &detxFile
   G4Tubs *cathodTube = new G4Tubs("CathodTube", 0.0 * cm, 4.7462 * cm, 0.5 * cm, 0.0 * deg, 360.0 * deg);
   G4LogicalVolume *cathodLog = new G4LogicalVolume(cathodTube, Cathod, "CathodVolume");
 
+  // DETX V2 FORMA-
+  // --------------
+  //
+  // global_det_id format_version\n
+  //  
+  // UTC_validity_from UTC_validity_to \n
+  // 
+  // UTM_ref_grid UTM_ref_easting UTM_ref_northing UTM_ref_z \n
+  // 
+  // ndoms \n
+  // 
+  // dom_id line_id floor_id npmts \n
+  // 
+  //  pmt_id_global x y z dx dy dz t0 \n
+  // 
+  //  pmt_id_global x y z dx dy dz t0 \n 
+  // 
+  //  ... 
+  // 
+  //  pmt_id_global x y z dx dy dz t0 \n
+  //  
+  // #repeat for each dom
+  
   std::cout << "Parse DETX..." << std::endl;
   std::ifstream infile(detxFile);
   std::string line;
-  
-  // global_det_id format_version\n
-  int global_det_id, _;
-  std::getline(infile, line);
   std::istringstream iss(line);
-  iss >> global_det_id >> _;
 
-  numCathods = 0;
+  int global_det_id, format_version;
+  infile >> global_det_id >> format_version;
+  std::cout << "Det ID: "<< global_det_id << std::endl;
+  std::cout << "DetX version: "<< format_version << std::endl;
 
-  //UTC_validity_from UTC_validity_to \n
-  //UTM_ref_grid UTM_ref_easting UTM_ref_northing UTM_ref_z \n
-  std::getline(infile, line);
-  std::getline(infile, line);
+  float UTC_validity_from, UTC_validity_to;
+  infile >> UTC_validity_from >> UTC_validity_to;
+  std::cout << "UTC validity from: "<< UTC_validity_from << std::endl;
+  std::cout << "UTC validity to: "<< UTC_validity_to << std::endl;
+  
+  float UTM_ref_grid, UTM_ref_easting, UTM_ref_northing, UTM_ref_z;
+  infile >> UTM_ref_grid >> UTM_ref_easting >> UTM_ref_northing >> UTM_ref_z;
+  std::cout << "UTM ref grid: "<< UTM_ref_grid << std::endl;
   
   int n_doms;
-  std::getline(infile, line);
-  iss >> n_doms;
-
+  infile >> n_doms;
+  std::cout << "Num Doms: "<< n_doms << std::endl;
+  
+  numCathods = 0;
 
   for (int dom = 0; dom < n_doms; dom++) {
-    std::getline(infile, line);
     int dom_id, line_id, floor_id, n_pmts;
-    iss >> dom_id >> line_id >> floor_id >> n_pmts;
+    infile >> dom_id >> line_id >> floor_id >> n_pmts;
 
     for (int pmt = 0; pmt < n_pmts; pmt++) {
-      std::getline(infile, line);
       int pmt_id_global;
       double pos_x, pos_y, pos_z, dir_x, dir_y, dir_z, t0;
-      iss >> pmt_id_global >> pos_x >> pos_y >> pos_z >> dir_x >> dir_y >> dir_z >> t0;
+      infile >> pmt_id_global >> pos_x >> pos_y >> pos_z >> dir_x >> dir_y >> dir_z >> t0;
 
       // needed for can computation
       z_all.push_back(pos_z);
