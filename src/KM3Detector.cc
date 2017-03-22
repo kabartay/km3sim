@@ -126,7 +126,7 @@ void KM3Detector::FindDetectorRadius() {
         z_all.begin(), z_all.end()) + 1.0) * meter;
   bottomPosition = (*std::min_element(
         z_all.begin(), z_all.end()) + 1.0) * meter;
-  
+
   std::cout << "Min Z, Max Z, MaxAbsDist (on top): " << bottomPosition / m
     << ", " << highestStorey / m << ", " << MaxAbsDist / m << std::endl;
 
@@ -677,7 +677,7 @@ void KM3Detector::ConstructMaterials() {
 }
 
 
-G4VPhysicalVolume *KM3Detector::SetSensitiveCathods(G4VPhysicalVolume *pvol, 
+G4VPhysicalVolume *KM3Detector::SetSensitiveCathods(G4VPhysicalVolume *pvol,
     G4VSensitiveDetector *sd) {
   int n_cath = 0;
   int n_daughters = pvol->GetLogicalVolume()->GetNoDaughters();
@@ -690,7 +690,7 @@ G4VPhysicalVolume *KM3Detector::SetSensitiveCathods(G4VPhysicalVolume *pvol,
   }
   return pvol;
 }
-  
+
 
 
 G4int KM3Detector::TotalPMTEntities(const G4VPhysicalVolume *pvol) {
@@ -723,7 +723,7 @@ G4VPhysicalVolume *KM3Detector::Construct() {
     G4Exception(
         "World volume not set properly check your setup selection "
         "criteria or GDML input!",
-        "", FatalException, ""); 
+        "", FatalException, "");
   }
 
   std::cout << "Count Cathods..." << std::endl;
@@ -757,7 +757,7 @@ G4VPhysicalVolume *KM3Detector::Construct() {
     std::cout << aLogicalVolume->GetName() << std::endl;
 
     //if (((aLogicalVolume->GetName()).contains(cathVol)) ||
-    //    ((aLogicalVolume->GetName()).contains(deadVol))) 
+    //    ((aLogicalVolume->GetName()).contains(deadVol)))
     if( (aLogicalVolume->GetName() == cathVol) ||
         (aLogicalVolume->GetName() == deadVol) ) {
       aLogicalVolume->SetSensitiveDetector(aMySD);
@@ -881,25 +881,25 @@ G4VPhysicalVolume* KM3Detector::ConstructWorldVolume(const std::string &detxFile
   // --------------
   //
   // global_det_id format_version\n
-  //  
+  //
   // UTC_validity_from UTC_validity_to \n
-  // 
+  //
   // UTM_ref_grid UTM_ref_easting UTM_ref_northing UTM_ref_z \n
-  // 
+  //
   // ndoms \n
-  // 
+  //
   // dom_id line_id floor_id npmts \n
-  // 
+  //
   //  pmt_id_global x y z dx dy dz t0 \n
-  // 
-  //  pmt_id_global x y z dx dy dz t0 \n 
-  // 
-  //  ... 
-  // 
+  //
   //  pmt_id_global x y z dx dy dz t0 \n
-  //  
+  //
+  //  ...
+  //
+  //  pmt_id_global x y z dx dy dz t0 \n
+  //
   // #repeat for each dom
-  
+
   std::cout << "Parse DETX..." << std::endl;
   std::ifstream infile(detxFile);
   std::string line;
@@ -914,15 +914,15 @@ G4VPhysicalVolume* KM3Detector::ConstructWorldVolume(const std::string &detxFile
   infile >> UTC_validity_from >> UTC_validity_to;
   std::cout << "UTC validity from: "<< UTC_validity_from << std::endl;
   std::cout << "UTC validity to: "<< UTC_validity_to << std::endl;
-  
+
   float UTM_ref_grid, UTM_ref_easting, UTM_ref_northing, UTM_ref_z;
   infile >> UTM_ref_grid >> UTM_ref_easting >> UTM_ref_northing >> UTM_ref_z;
   std::cout << "UTM ref grid: "<< UTM_ref_grid << std::endl;
-  
+
   int n_doms;
   infile >> n_doms;
   std::cout << "Num Doms: "<< n_doms << std::endl;
-  
+
   numCathods = 0;
 
   for (int dom = 0; dom < n_doms; dom++) {
