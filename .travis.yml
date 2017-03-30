@@ -2,6 +2,9 @@ language: cpp
 
 compiler: g++
 
+branches:
+  - master
+
 addons:
   apt:
     sources:
@@ -9,9 +12,18 @@ addons:
     - sourceline: 'deb http://lcg-heppkg.web.cern.ch/lcg-heppkg/debian stable hep'
     - sourceline: 'deb-src http://lcg-heppkg.web.cern.ch/lcg-heppkg/debian stable hep'
     packages:
+    - cmake
     - geant4
 
-script:
-  - mkdir -p build
+
+before_script:
+  - set -e
+  - ls
+  - mkdir build
   - cd build
-  - cmake .. && make
+  - cmake .. 
+  - set +e
+
+script:
+  - ls
+  - make
